@@ -21,6 +21,10 @@ footer {
 	font-size: 100%;
 	color:white;
 	}
+
+#linkhome a {
+	margin: 5px;
+}
 #intro{
 	font-size:40%;
 }

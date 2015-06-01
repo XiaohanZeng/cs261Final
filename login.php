@@ -4,7 +4,7 @@
     <title>Login Page</title>
   </head>
   <body>
-    <form id="loginForm" method="POST" action="home.html" onclick=homePageLogin()>
+    <form id="loginForm" method="POST" action="home.php" >
       <input type="text" name="username" value="Username">
       <input type="submit" value="Login">
     </form>
