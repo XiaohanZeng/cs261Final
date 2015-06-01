@@ -5,7 +5,8 @@ $( document ).ready(function() {
 		resizable: false,
 		stack: true,
 		height: '400',
-		width: '400px'
+		width: '400px',
+		
 	});		
 });
 					
