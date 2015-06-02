@@ -18,31 +18,26 @@ function getTrendingStories()
 	
 	// Decode json string and find out titles of trending stories
 	$raw_json = json_decode($resp, true);
-	$trend_lists = recursiveFind($raw_json, "title");
+	$trend_lists = recursiveFind($raw_json, "trendsList");
+	$trend_title_lists = array();	
+	foreach($trend_lists[0] as $value)
+	{
+		//var_dump($value);
+		$trend_title_lists[] = $value['title'];
+	}
 
 	// Slice the array to only get top 30 titles
-	$trend_lists = array_slice($trend_lists, 0, 30);
-	
-	/*
-	// For each title use google custom API to search and get image thumbnail and link
-	$trend_stories = array();
-	foreach ($trend_lists as $search_key)
-	{
-		$trend_story = array();
-		$trend_story['title'] = $search_key;
-		$search_results = searchItem($search_key);
-		$trend_story = array_merge ($trend_story, $search_results);
-		$trend_stories[] = $trend_story;
-	}
+	$trend_title_lists = array_slice($trend_title_lists, 0, 3);
 	
 	// Encode the results array to JSON string
-	$trend_stories = json_encode(array_values($trend_stories));
-		
-	echo $trend_stories;*/
+	$trend_lists_encoded = json_encode(array_values($trend_title_lists));
 	
+	echo $trend_lists_encoded;
 }
 
 getTrendingStories();
+
+
 
 // ------------------ helper functions -----------------------------
 
@@ -82,22 +77,6 @@ function makeRequest($url, $requestType, $data = NULL)
 	curl_close($curl);
 	
 	return $resp;
-}
-
-searchItem("mother");
-
-/****************************************************
-	Search keyword using google custom search API and return its image thumbnail and link to the page 
-	param keyword: keyword to search
-	return: image thumbnail and link in an array
-****************************************************/
-function searchItem($keyword)
-{
-	$url = "https://www.googleapis.com/customsearch/v1?cx=007306240209605891397%3Ah9qucp1qv8g&q=American+Idol&num=5&key=AIzaSyDqHSQNdJfxBFIvTmwHfpBR2HWo4FZ7aOI";
-	
-	$results = makeRequest($url, "GET");
-	echo $results;
-	return $results;
 }
 
 /****************************************************

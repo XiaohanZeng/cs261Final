@@ -8,6 +8,7 @@ $( document ).ready(function() {
 		width: '400px',
 		
 	});		
+	populateTrendingPictures();
 });
 					
 function popWindow(){
