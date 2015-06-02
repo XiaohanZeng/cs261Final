@@ -91,29 +91,36 @@ session_start();
         </div>
 		<!--popWindow-->
 		<div id="dialog" style="display:none">
+			<script type="text/javascript">
+			makeRequest('action=updateSelection');
+			</script>
 			<div value='floder'>
 			
-			<img class="popImage" src="./pictures/14303572771240.jpg" ><br>
-			<P> please choose your floder to save this image, or create a new folder to save it.</p>
-			<select <!--name="chooseFolder" onChange="change(this.value)"-->>
-			<option value="folder1"> Folder1</option>
-			<option value="folder2"> Folder2</option>
-			<option value="folder3"> Folder3</option>
-			</select>
-			<br>
-			<form action='getdata.php' method="get" id="addForm">
-			New Folder Name:<input type="text" name="folder name"> 
-			<input type="submit" value="Submit" id="addNewFolder"><br>
-			</form>
+				<img class="popImage" src="./pictures/14303572771240.jpg" ><br>
+				<P> create a new folder to save it.</p>
+				<form id="addForm">
+				New Folder Name:<input type="text" name="folderName"><br>
+				</form>
+				<button onclick="addNew()" value="Submit" id="addNewFolder"> Add</button><br>
+				<p>Please choose the folder here.</p>
+				<select id="dropDown">
+				</select>
+				<br>
+				
+				<form id="addTags">
+				Add Tags:<input type="text" name="tagName"><br> 
+				</form>
+				<button onclick="addTag()" value="Submit" id="addNewTags"> Add</button><br>
+				
 			
 			</div>
-			<div value='tag'>
+			<!--<div value='tag'>
 			<p>please add the tag you need. Using"#"to divide different tags.</p>
 			<form action='#'>
-			Tags:<input type="text" name="folder name"> 
+			Tags:<input type="text" name="TagName"> 
 			<input type="submit" value="Submit"><br>
 			</form>
-			</div>
+			</div>-->
 		</div>
         <!-- /.row -->
 		
