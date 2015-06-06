@@ -118,7 +118,9 @@ session_start();
         <!-- /.row -->
 		
 		<div  id="photoContainer">
-			
+			<div id='loadingmessage' style='display:none'>
+			  <img src='./pictures/loading.gif'/>
+			</div>
 		</div>
         <!-- /.row -->
 

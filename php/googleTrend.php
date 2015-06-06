@@ -32,7 +32,7 @@ function getTrendingStories()
 		}
 
 		// Slice the array to only get top 30 titles
-		$trendTitleLists = array_slice($trendTitleLists, 0, 3);
+		$trendTitleLists = array_slice($trendTitleLists, 0, 15);
 		
 		$count = 0;			
 		$dom = new DOMDocument;
