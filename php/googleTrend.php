@@ -201,7 +201,10 @@ function recursiveFind(array $array, $expected_key, $value_keys = NULL)
 			{
 				foreach ($value_keys as $value_key)
 				{
-					$item[$value_key] = $value[$value_key];
+					if (array_key_exists($value_key, $value))
+					{
+						$item[$value_key] = $value[$value_key];
+					}
 				}
 			}
 			$results[] = $item;
