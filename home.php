@@ -1,7 +1,15 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
-session_start();
+include './php/getdata.php';
+
+$user ='root';
+$pass='';
+$db='340final';
+
+
+$mysqli=new mysqli('localhost',$user,$pass,$db) or die("Unable to connect");
+//session_start();
 
     if(isset($_REQUEST['username'])) 
 	{
@@ -12,7 +20,7 @@ session_start();
 		}
 		elseif($_SESSION['username'] != $_REQUEST['username'])
 		{
-			session_start();
+			
 			session_unset();
 			session_destroy();
 			$_SESSION['username'] = $newName;		
@@ -29,12 +37,38 @@ session_start();
 
      
     }
+	addNewUser();
+
+	function addNewUser()
+	{
+		global $mysqli;
+		$name = $_SESSION['username'];
+		$all = $mysqli->prepare("SELECT Users_Id FROM users WHERE user_name LIKE '$name' ");
+		$all->execute();
+		$result = $all->get_result();
+		if($result->num_rows == 0)
+		{
+			$all = $mysqli->prepare("INSERT INTO users (user_name) VALUES('$name')");
+			$all->execute();
+			setDefaultFolder();
+		}
+	}
+	function setDefaultFolder()
+	{
+		global $mysqli;
+		$name = 'default Folder';
+		$userID = getUserId();	
+		$all = $mysqli->prepare("INSERT INTO folders (Folders_Name,Users_Id) VALUES('$name','$userID')");
+		$all->execute();
+
+	}
 
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/3-col-portfolio.css" rel="stylesheet">
@@ -94,9 +128,9 @@ session_start();
 			<script type="text/javascript">
 			makeRequest('action=updateSelection');
 			</script>
-			<div value='floder'>
+			<div  id="myDiv" >
 			
-				<img class="popImage" src="./pictures/14303572771240.jpg" ><br>
+				<img class="pinImage" ><br>
 				<P> create a new folder to save it.</p>
 				<form id="addForm">
 				New Folder Name:<input type="text" name="folderName"><br>
@@ -110,7 +144,7 @@ session_start();
 				<form id="addTags">
 				Add Tags:<input type="text" name="tagName"><br> 
 				</form>
-				<button onclick="addTag()" value="Submit" id="addNewTags"> Add</button><br>
+				<button onclick="addTag()" value="Submit" id="addNewTags"> Pin</button><br>
 				
 			
 			</div>

@@ -9,18 +9,48 @@ $( document ).ready(function() {
 		
 	});		
 	populateTrendingPictures();
+	changePinStatus();
 });
 					
-function popWindow(){
+function popWindow(element){
 	
-	$("#dialog").dialog('open');
+
+	var parent= element.parentElement;
+	var imageUrl= parent.getElementsByTagName('img')[0].src;
+	var h3Tag = parent.getElementsByTagName('h3')[0];
+	var imgTitleTag = h3Tag.getElementsByTagName('a')[0];
+	var title = imgTitleTag.textContent;
+	var imagePageLink = imgTitleTag.href;
 	
+	var linkText = parent.getElementsByClassName('floatMenu')[0].textContent;
+	if (linkText == "Click to Pin")
+	{
+		localStorage.setItem("imageUrl", imageUrl);
+		localStorage.setItem("imagetitle",title);
+		localStorage.setItem("imagePageLink", imagePageLink);	
+		$("#dialog").dialog('open');
+		getSmallImg();
+	}
+	else
+	{
+		unPinPicture(title, imageUrl, imagePageLink);
+		element.textContent = "Click to Pin";
+	}
+}
+
+function unPinPicture(title, imageUrl, imagePageLink)
+{
+		makeRequest('action=unPinPicture&imageUrl='+imageUrl+'&title='+title+'&imagePageLink='+imagePageLink);
+}
+
+function getSmallImg()
+{
+	var imageUrl=localStorage.getItem("imageUrl");
+	document.getElementsByClassName("pinImage")[0].src= imageUrl;
 }
 
 function addNew()
 {
-	
-	
 		var newFolderName=document.getElementById('addForm').elements['folderName'].value;
 		
 
@@ -46,9 +76,7 @@ function addNew()
 				errorMessage3 = "not unique name";
 			}
 			
-			window.alert(errorMessage1 + " " + errorMessage2 + " " + errorMessage3)
-		
-		
+			window.alert(errorMessage1 + " " + errorMessage2 + " " + errorMessage3)		
 	}
 
 }
@@ -58,15 +86,28 @@ function addTag()
 	var newTag=document.getElementById('addTags').elements['tagName'].value;
 	//var folderGo=document.getElementById('dropDown')
 	var res = newTag.split("#");
+	var imageUrl=localStorage.getItem("imageUrl");
+	var title=localStorage.getItem("imagetitle");
+	var imagePageLink=localStorage.getItem("imagePageLink");
+	var e = document.getElementById("dropDown");
+	var selectedFolder = e.options[e.selectedIndex].value;
+	
+	makeRequest('action=addPicInfo&imageUrl='+imageUrl+'&title='+title+'&imagePageLink='+imagePageLink+'&selectedFolder='+selectedFolder);
+	
 	for(i=0; i<res.length; i++)
 	{
 		var temp = res[i];
-		makeRequest('action=addTag&tag='+temp);
+		makeRequest('action=addTag&tag='+temp+
+		'&imageUrl='+imageUrl+
+		'&title='+title+
+		'&imagePageLink='+imagePageLink+
+		'&selectedFolder='+selectedFolder);
 	}
+	$("#dialog").dialog('close');
+	changePinStatus();
 	
-	
-}
 
+}
 
 function checkUniqueName(newName)
 {
@@ -107,3 +148,37 @@ function makeRequest(statement)
     xmlhttp.send();
 	
 }
+
+//change click to pin to unpin
+function changePinStatus()
+{
+	$.ajax({
+		method: "GET",
+		url: "php/getdata.php",
+		dataType: "json",
+		data:{action:'upDatePinStatus'},
+		success: function (returndata)
+		{
+			var onPageImages = document.getElementsByClassName('col-md-4 portfolio-item');
+			for(var i = 0; i < returndata.length; i++)
+			{
+				for(var t = 0; t < onPageImages.length; t++)
+				{
+					var parent= onPageImages[t];
+					var imageUrl= parent.getElementsByTagName('img')[0].src;
+					var h3Tag = parent.getElementsByTagName('h3')[0];
+					var imgTitleTag = h3Tag.getElementsByTagName('a')[0];
+					var title = imgTitleTag.textContent;
+					var imagePageLink = imgTitleTag.href;
+					if(returndata[i].imgPageLink == imagePageLink && 
+					returndata[i].imgUrl == imageUrl &&
+					returndata[i].title == title)
+					{
+						parent.getElementsByClassName('floatMenu')[0].textContent = "unpin";
+					}	
+				}
+			}
+		}
+	});	
+}
+

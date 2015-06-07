@@ -92,7 +92,7 @@ function constructNewPhotoNode($dom, $imageItem)
 	
 	$pinLink = $dom->createElement('a', "Click to Pin");
 	$pinLink->setAttribute("class", "floatMenu");
-	$pinLink->setAttribute("onclick", "popWindow()");
+	$pinLink->setAttribute("onclick", "popWindow(this)");
 	$pinLink->setAttribute("href", "#");
 	$imageContainer->appendChild($pinLink);
 

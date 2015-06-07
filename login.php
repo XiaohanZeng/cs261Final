@@ -9,7 +9,6 @@
       <input type="submit" value="Login">
     </form>
 
-
 <?php
 if(isset($_GET['logout']) && $_GET['logout']=='true')
 {
