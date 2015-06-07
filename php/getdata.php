@@ -51,6 +51,10 @@ if(isset($_REQUEST['action']))
 	{
 		unPinPicture();
 	}
+	if($action_value == 'updateFolderSelection')
+	{
+		buildSelection();
+	}
 }
 
 function buildSelection($addFolderName = NULL )

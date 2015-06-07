@@ -29,6 +29,7 @@ function popWindow(element){
 		localStorage.setItem("imagetitle",title);
 		localStorage.setItem("imagePageLink", imagePageLink);	
 		$("#dialog").dialog('open');
+		makeRequest('action=updateFolderSelection');
 		getSmallImg();
 	}
 	else
