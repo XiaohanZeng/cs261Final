@@ -9,7 +9,6 @@ $( document ).ready(function() {
 		
 	});		
 	populateTrendingPictures();
-	changePinStatus();
 });
 					
 function popWindow(element){

@@ -259,7 +259,8 @@ function unPinPicture()
 	$imagePageLink=$_REQUEST['imagePageLink'];
 	$pictureId = getPictureId($title, $imageUrl, $imagePageLink);
 	$all = $mysqli->prepare("DELETE FROM pinpictures WHERE Users_Id = '$userId' AND P_Id = '$pictureId'");
-	$all = $mysqli->prepare("DELETE FROM INFOLDER WHERE P_Id = '$pictureId'");
+	$all->execute();
+	$all = $mysqli->prepare("DELETE FROM infolder WHERE P_Id = '$pictureId'");
 	$all->execute();
 }
 // get users' folder info and image info prepare to load users' folder page
