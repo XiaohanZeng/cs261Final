@@ -99,7 +99,7 @@ $mysqli=new mysqli('localhost',$user,$pass,$db) or die("Unable to connect");
 			<div id='linkhome'>
 			<a href="folderPage.html">
 			<?php
-				echo "Go to".$_SESSION['username']."'s folder";
+				echo $_SESSION['username']."'s pinned stories";
 			?>
 			</a>
 			<a href="logout.php"> logout </a>
@@ -116,10 +116,10 @@ $mysqli=new mysqli('localhost',$user,$pass,$db) or die("Unable to connect");
         <!-- Page Header -->
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">All pictures in DataBase
+                <h1 class="page-header">Trending stories today
 				<div id='intro'>
                     <p>you can pin/save any of these pictures into your folder or add tags to it</p>
-					<div>
+				</div>
                 </h1>
             </div>
         </div>
@@ -148,13 +148,6 @@ $mysqli=new mysqli('localhost',$user,$pass,$db) or die("Unable to connect");
 				
 			
 			</div>
-			<!--<div value='tag'>
-			<p>please add the tag you need. Using"#"to divide different tags.</p>
-			<form action='#'>
-			Tags:<input type="text" name="TagName"> 
-			<input type="submit" value="Submit"><br>
-			</form>
-			</div>-->
 		</div>
         <!-- /.row -->
 		
@@ -170,9 +163,6 @@ $mysqli=new mysqli('localhost',$user,$pass,$db) or die("Unable to connect");
         <!-- Footer -->
         <footer>
             <div class="row">
-                <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
-                </div>
             </div>
             <!-- /.row -->
         </footer>

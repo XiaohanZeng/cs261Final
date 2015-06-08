@@ -258,6 +258,7 @@ function unPinPicture()
 	$imagePageLink=$_REQUEST['imagePageLink'];
 	$pictureId = getPictureId($title, $imageUrl, $imagePageLink);
 	$all = $mysqli->prepare("DELETE FROM pinpictures WHERE Users_Id = '$userId' AND P_Id = '$pictureId'");
+	$all = $mysqli->prepare("DELETE FROM INFOLDER WHERE P_Id = '$pictureId'");
 	$all->execute();
 }
 // get users' folder info and image info prepare to load users' folder page
@@ -365,9 +366,9 @@ function constructNewPhotoNode($dom, $imageItem)
 	$imgTitleContainer->appendChild($imgTitle);
 	$imageContainer->appendChild($imgTitleContainer);
 	
-	$pinLink = $dom->createElement('a', "Click to Pin");
+	$pinLink = $dom->createElement('a', "unpin");
 	$pinLink->setAttribute("class", "floatMenu");
-	$pinLink->setAttribute("onclick", "popWindow(this)");
+	$pinLink->setAttribute("onclick", "unPin(this)");
 	$pinLink->setAttribute("href", "#");
 	$imageContainer->appendChild($pinLink);
 
