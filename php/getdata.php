@@ -3,12 +3,13 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
 
-$user ='root';
-$pass='';
-$db='340final';
+$user ='zengx-db';
+$pass='qWXPWG1wbhOLVCAG';
+$db='zengx-db';
+
 session_start();
 
-$mysqli=new mysqli('localhost',$user,$pass,$db) or die("Unable to connect");
+$mysqli=new mysqli('oniddb.cws.oregonstate.edu',$user,$pass,$db) or die("Unable to connect");
 
 
 

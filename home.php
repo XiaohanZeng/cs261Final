@@ -7,6 +7,11 @@ $user ='root';
 $pass='';
 $db='340final';
 
+$dbhost = 'oniddb.cws.oregonstate.edu';
+$dbname = 'zengx-db';
+$dbuser = 'zengx-db';
+$dbpass = 'qWXPWG1wbhOLVCAG';
+
 
 $mysqli=new mysqli('localhost',$user,$pass,$db) or die("Unable to connect");
 //session_start();
