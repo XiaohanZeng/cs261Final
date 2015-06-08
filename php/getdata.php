@@ -266,12 +266,13 @@ function getUserPin()
 {
 	global $mysqli;
 	$userId = getUserId();
-	$all = $mysqli->prepare("SELECT folders.Folders_Name, pictures.imgUrl, pictures.P_name, pictures.imgPageLink 
-	FROM folders JOIN infolder ON folders.Folders_Id=infolder.Folders_Id JOIN pictures ON infolder.P_Id=pictures.P_Id 
-	JOIN pinpictures ON pictures.P_Id=pinpictures.P_Id 
-	JOIN users ON users.Users_Id=pinpictures.Users_Id 
-	WHERE users.Users_Id='$userId' 
-	GROUP BY folders.Folders_Name");
+	$all = $mysqli->prepare("SELECT DISTINCT folders.Folders_Name, pictures.imgUrl, pictures.P_name, pictures.imgPageLink 
+	FROM users 
+	JOIN pinpictures ON pinpictures.Users_Id = users.Users_Id 
+	JOIN pictures ON pictures.P_Id = pinpictures.P_Id 
+	JOIN infolder ON infolder.P_Id = pinpictures.P_Id 
+	JOIN folders ON folders.Folders_Id = infolder.Folders_Id AND folders.Users_Id = users.Users_Id 
+	WHERE users.Users_Id='$userId'");
 	$all->execute();
 	$result = $all->get_result();
 	$foldersArray =[];
