@@ -27,6 +27,7 @@ session_start();
 	<link rel="stylesheet" href="css/jquery-ui.min.css">
 	<script src="js/jquery-ui.min.js"></script>
 	<script src="js/folderonLoad.js"></script>
+	<script src="js/trendingItemCrawler.js"></script>
 	
 </head>
 <body>
@@ -52,10 +53,15 @@ session_start();
 			</div>
         <!-- /.container -->
     </nav>
-<div class="container">
- <div  id="catchPhotos">
-			
- </div>
-</div>
+<script>
+$( document ).ready(function() {
+	populateUserPictures();
+});
+</script>
+<div  id="UserPhotoContainer">
+			<div id='loadingmessage' style='display:none'>
+			  <img src='./pictures/loading.gif'/>
+			</div>
+		</div>
 
 </body>

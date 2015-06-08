@@ -55,6 +55,10 @@ if(isset($_REQUEST['action']))
 	{
 		buildSelection();
 	}
+	if($action_value == 'getUserPin')
+	{
+		getUserPin();
+	}
 }
 
 function buildSelection($addFolderName = NULL )
@@ -255,6 +259,118 @@ function unPinPicture()
 	$pictureId = getPictureId($title, $imageUrl, $imagePageLink);
 	$all = $mysqli->prepare("DELETE FROM pinpictures WHERE Users_Id = '$userId' AND P_Id = '$pictureId'");
 	$all->execute();
+}
+// get users' folder info and image info prepare to load users' folder page
+
+function getUserPin()
+{
+	global $mysqli;
+	$userId = getUserId();
+	$all = $mysqli->prepare("SELECT folders.Folders_Name, pictures.imgUrl, pictures.P_name, pictures.imgPageLink 
+	FROM folders JOIN infolder ON folders.Folders_Id=infolder.Folders_Id JOIN pictures ON infolder.P_Id=pictures.P_Id 
+	JOIN pinpictures ON pictures.P_Id=pinpictures.P_Id 
+	JOIN users ON users.Users_Id=pinpictures.Users_Id 
+	WHERE users.Users_Id='$userId' 
+	GROUP BY folders.Folders_Name");
+	$all->execute();
+	$result = $all->get_result();
+	$foldersArray =[];
+	$lastIterationFolder = "";
+	$imagesArray = [];
+	$dom = new DOMDocument;
+	$Folders_Name = "";
+	//append images into imagesArray, if folder name changes append it to folders array and new a imagesArray.
+	while ($row = $result->fetch_array(MYSQLI_NUM))
+	{
+			$Folders_Name = $row[0];
+			if($lastIterationFolder != $Folders_Name)
+			{
+				if(!empty($imagesArray))
+				{
+					$foldersArray[$lastIterationFolder] = $imagesArray;
+					$imagesArray =[];
+				}
+			}
+			$imgUrl = $row[1];
+			$imgPageLink = $row[3];
+			$P_name = $row[2];
+			$imageItem = getImageItem($imgUrl,$P_name,$imgPageLink,$Folders_Name);
+			$imageDiv = constructNewPhotoNode($dom,$imageItem);
+			$imagesArray[] = $imageDiv;	
+			$lastIterationFolder = $Folders_Name;
+	}
+	$foldersArray[$Folders_Name] = $imagesArray;
+	
+	// for each grid of folders array it contains a array of image Items with the same folder name. 
+	$container = $dom->createElement('div');
+	foreach($foldersArray as $Folders_Name => $imagesArray)
+	{	
+		$folderContainer = $dom->createElement('div');
+		$folderContainer->setAttribute("class", "folder");
+		$paragraph = $dom->createTextNode($Folders_Name);
+		$folderContainer->appendChild($paragraph);	
+		$count = 0;	
+		$rowContainer = NULL;
+		for($t=0; $t<sizeof($imagesArray);$t++)
+		{	
+			if ($count % 3 == 0)
+			{
+				if ($rowContainer != NULL)
+				{
+					$folderContainer->appendChild($rowContainer);
+				}
+				$rowContainer = $dom->createElement('div');
+				$rowContainer->setAttribute("class", "row");
+			}
+			$rowContainer->appendChild($imagesArray[$t]);
+			$count++;
+		}
+		if ($rowContainer != NULL)
+		{
+			$folderContainer->appendChild($rowContainer);
+		}
+		$container->appendChild($folderContainer);
+	}
+	
+	echo $dom->saveHTML($container);	
+}
+function getImageItem($imgUrl,$P_name,$imgPageLink,$Folders_Name)
+{
+	$imageItem = (object) array('title' => $P_name,
+								'imgUrl' => $imgUrl,
+								'imgPageLink' => $imgPageLink,
+								'folderName' => $Folders_Name);
+	
+	return $imageItem;
+}
+
+function constructNewPhotoNode($dom, $imageItem)
+{
+	$imageContainer = $dom->createElement('div');
+	$imageContainer->setAttribute("class", "col-md-4 portfolio-item");
+	
+	$imageLink = $dom->createElement('a');
+	$imageLink->setAttribute("href", "$imageItem->imgPageLink");
+	$imageContainer->appendChild($imageLink);
+	
+	$img = $dom->createElement('img');
+	$img->setAttribute("class", "img-responsive");
+	$img->setAttribute("src", "$imageItem->imgUrl");
+	$imageLink->appendChild($img);
+	
+	$imgTitleContainer = $dom->createElement('h3');
+	$imgTitle = $dom->createElement('a', "$imageItem->title");
+	$imgTitle->setAttribute("href", "$imageItem->imgPageLink");
+	$imgTitleContainer->appendChild($imgTitle);
+	$imageContainer->appendChild($imgTitleContainer);
+	
+	$pinLink = $dom->createElement('a', "Click to Pin");
+	$pinLink->setAttribute("class", "floatMenu");
+	$pinLink->setAttribute("onclick", "popWindow(this)");
+	$pinLink->setAttribute("href", "#");
+	$imageContainer->appendChild($pinLink);
+
+	return $imageContainer;
 }
 
 ?>
