@@ -145,7 +145,7 @@ function makeRequest(statement)
 
 	}
 	
-    xmlhttp.open("GET",'php/getData.php?' + statement,true);
+    xmlhttp.open("GET",'php/getdata.php?' + statement,true);
     xmlhttp.send();
 	
 }
