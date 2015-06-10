@@ -275,7 +275,8 @@ function getUserPin()
 	JOIN pictures ON pictures.P_Id = pinpictures.P_Id 
 	JOIN infolder ON infolder.P_Id = pinpictures.P_Id 
 	JOIN folders ON folders.Folders_Id = infolder.Folders_Id AND folders.Users_Id = users.Users_Id 
-	WHERE users.Users_Id='$userId'");
+	WHERE users.Users_Id='$userId'
+	ORDER BY folders.Folders_Name");
 	$all->execute();
 	$result = $all->get_result();
 	$foldersArray =[];
